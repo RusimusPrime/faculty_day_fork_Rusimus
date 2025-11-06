@@ -46,4 +46,24 @@ fun main() {
 
     val unknown = null
     println("unknown: $unknown")
+
+    val array = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val doubleDimensionArray = Array(2){
+        Array(2){0}
+    }
+    val l = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    for (i in array.indices) {
+        println(array[i])
+    }
+
+    for (i in 1..10){
+        print("$i ")
+    }
+
+    for (i in 6 downTo 0 step 2){
+        print("$i ")
+    }
+
+    throw IllegalArgumentException("")
 }
