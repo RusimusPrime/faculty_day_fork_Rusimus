@@ -1,42 +1,99 @@
-package ru.tbank.education.school.lesson1
+package ru.tbank.educations.school.lesson1
 
-/**
- * Метод для вычисления простых арифметических операций.
- */
-fun calculate(a: Double, b: Double, operation: OperationType): Double? {
+import java.util.Locale
+import kotlin.math.*
+
+
+enum class OperationType {
+    ADD, SUBTRACT, MULTIPLY, DIVIDE,
+    SIN, COS, TAN, SQRT, POWER
+}
+
+
+fun calculate(a: Double, b: Double, operation: OperationType = OperationType.ADD): Double? {
     return when (operation) {
         OperationType.ADD -> a + b
         OperationType.SUBTRACT -> a - b
         OperationType.MULTIPLY -> a * b
         OperationType.DIVIDE -> if (b != 0.0) a / b else null
+        OperationType.SIN -> sin(a)
+        OperationType.COS -> cos(a)
+        OperationType.TAN -> tan(a)
+        OperationType.SQRT -> if (a >= 0) sqrt(a) else null
+        OperationType.POWER -> a.pow(b)
     }
 }
 
-/**
- * Функция вычисления выражения, представленного строкой
- * @return результат вычисления строки или null, если вычисление невозможно
- * @sample "5 * 2".calculate()
- */
-@Suppress("ReturnCount")
+
 fun String.calculate(): Double? {
-    val sss = this.split(" ")
-    val op = when (sss[1]) {
-        "+" -> OperationType.ADD
-        "-" -> OperationType.SUBTRACT
-        "*" -> OperationType.MULTIPLY
-        "/" -> OperationType.DIVIDE
-        else -> return null
-    }
-    return when (sss.size) {
-        3 -> when (sss[0].toDoubleOrNull() != null) {
-            true -> when (sss[2].toDoubleOrNull() != null) {
-                true -> calculate(sss[0].toDouble(), sss[2].toDouble(), op)
-                false -> null
+    val example = this.trim().split(" ")
+
+    return when (example.size) {
+        3 -> {
+            val a = example[0].toDoubleOrNull() ?: return null
+            val b = example[2].toDoubleOrNull() ?: return null
+
+            val operation = when (example[1]) {
+                "+" -> OperationType.ADD
+                "-" -> OperationType.SUBTRACT
+                "*", "x" -> OperationType.MULTIPLY
+                "/" -> OperationType.DIVIDE
+                "^", "pow" -> OperationType.POWER
+                else -> return null
             }
 
-            false -> null
+            calculate(a, b, operation)
+        }
+
+        2 -> {
+            val operation = when (example[0].lowercase(Locale.getDefault())) {
+                "sin" -> OperationType.SIN
+                "cos" -> OperationType.COS
+                "tan" -> OperationType.TAN
+                "sqrt" -> OperationType.SQRT
+                else -> return null
+            }
+
+            val a = example[1].toDoubleOrNull() ?: return null
+            calculate(a, 0.0, operation)
         }
 
         else -> null
     }
+}
+
+
+fun calculateWithParentheses(expression: String): Double? {
+    var expr = expression.trim()
+
+    while ("(" in expr && ")" in expr) {
+        val openIndex = expr.lastIndexOf("(")
+        val closeIndex = expr.indexOf(")", startIndex = openIndex)
+
+        if (closeIndex == -1) return null
+
+        val innerExpr = expr.substring(openIndex + 1, closeIndex)
+        val innerResult = calculateWithParentheses(innerExpr) ?: innerExpr.calculate()
+
+        if (innerResult == null) return null
+
+        expr = expr.take(openIndex) + innerResult.toString() + expr.substring(closeIndex + 1)
+    }
+
+    return expr.calculate()
+}
+
+fun calculateBigNumbers(a: String, b: String, operation: OperationType = OperationType.ADD): String? {
+    return try {
+        val numA = a.toDoubleOrNull() ?: return null
+        val numB = b.toDoubleOrNull() ?: return null
+
+        calculate(numA, numB, operation)?.toString()
+    } catch (error: Exception) {
+        null
+    }
+}
+
+fun main() {
+    println("10 / 2".calculate())
 }
