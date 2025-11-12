@@ -1,6 +1,5 @@
 package ru.tbank.educations.school.lesson1
 
-import java.util.Locale
 import kotlin.math.*
 
 
@@ -46,7 +45,7 @@ fun String.calculate(): Double? {
         }
 
         2 -> {
-            val operation = when (example[0].lowercase(Locale.getDefault())) {
+            val operation = when (example[0].toLowerCase()) {
                 "sin" -> OperationType.SIN
                 "cos" -> OperationType.COS
                 "tan" -> OperationType.TAN
@@ -95,5 +94,5 @@ fun calculateBigNumbers(a: String, b: String, operation: OperationType = Operati
 }
 
 fun main() {
-    println("10 / 2".calculate())
+    println("CIN 45".calculate())
 }
