@@ -1,4 +1,4 @@
-package ru.tbank.educations.school.lesson1
+package ru.tbank.education.school.lesson1
 
 import kotlin.math.*
 
@@ -94,5 +94,5 @@ fun calculateBigNumbers(a: String, b: String, operation: OperationType = Operati
 }
 
 fun main() {
-    println("CIN 45".calculate())
+    println(calculateWithParentheses("(45 / (40 / 8)) + 4"))
 }
