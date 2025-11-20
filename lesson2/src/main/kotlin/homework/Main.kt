@@ -31,7 +31,7 @@ abstract class Character(
     }
 }
 
-// 2. Sealed class для состояний игры (опционально)
+// 2. Sealed class для состояний игры
 sealed class GameState {
     object PlayerTurn : GameState()
     object EnemyTurn : GameState()
@@ -47,7 +47,7 @@ data class BattleResult(
     val playersAlive: Int
 )
 
-// 4. Базовый класс для игровых персонажей - теперь абстрактный
+// 4. Базовый класс для игровых персонажей (абстрактный)
 abstract class PlayerCharacter(
     name: String,
     health: Int,
@@ -74,31 +74,31 @@ abstract class PlayerCharacter(
 
     fun hasBuff(buff: String): Boolean = buffs.contains(buff)
 
-    // Добавим общий метод для всех игроков
+    // общий метод для всех игроков
     open fun showStatus() {
-        println("$name ($role) - Здоровье: $health/$maxHealth, Мана: $mana")
+        println("$name ($role) - Здоровье: $health/$maxHealth, Энергия искры: $mana")
     }
 
     fun getActionDescription(actionNumber: Int): String {
         return when (actionNumber) {
             1 -> when (this) {
                 is Adrian -> "Исцелить союзника (25 HP)"
-                is Zahir -> "Атака мечом (25 урона)"
-                is Milo -> "Магическая стрела (20 урона)"
+                is Zahir -> "Атака копьем (25 урона)"
+                is Milo -> "Теневеая стрела (20 урона)"
                 else -> "Основная атака"
             }
 
             2 -> when (this) {
-                is Adrian -> "Восстановить ману (+20)"
+                is Adrian -> "Восстановить энергию искры (+20)"
                 is Zahir -> "Защитная стойка (уменьшает урон)"
-                is Milo -> "Усилить союзника (+15 маны)"
+                is Milo -> "Усилить союзника (+15 энергии искры)"
                 else -> "Вторичное действие"
             }
 
             3 -> when (this) {
-                is Adrian -> "Мощное исцеление (40 HP, 30 маны)"
-                is Zahir -> "Сокрушительный удар (50 урона, 40 маны)"
-                is Milo -> "Огненная буря (60 урона, 50 маны)"
+                is Adrian -> "Мощное исцеление (40 HP, 30 энергии искры)"
+                is Zahir -> "Сокрушительный удар (50 урона, 40 энергии искры)"
+                is Milo -> "Теневая гробница (60 урона, 50 энергии искры)"
                 else -> "Супер способность"
             }
 
@@ -106,12 +106,12 @@ abstract class PlayerCharacter(
         }
     }
 
-    // Метод для проверки достаточности маны
+    // Метод для проверки достаточности энергии
     protected fun hasEnoughMana(requiredMana: Int): Boolean {
         return mana >= requiredMana
     }
 
-    // Метод для использования маны с проверкой
+    // Метод для использования энергии с проверкой
     protected fun useMana(amount: Int): Boolean {
         if (mana >= amount) {
             mana -= amount
@@ -126,7 +126,7 @@ class Adrian(
     name: String = "Адриан",
     health: Int = 80,
     maxHealth: Int = 80
-) : PlayerCharacter(name, health, maxHealth, "Лекарь") {
+) : PlayerCharacter(name, health, maxHealth, "Врач-ученый") {
 
     override fun firstAction(target: Character?) {
         if (target == null) {
@@ -138,7 +138,7 @@ class Adrian(
     }
 
     override fun secondAction(target: Character?) {
-        println("$name концентрируется и восстанавливает ману!")
+        println("$name концентрируется и восстанавливает энергию искры!")
         mana += 20
         println("Мана: $mana")
     }
@@ -150,7 +150,7 @@ class Adrian(
         }
         // Проверяем ману перед использованием способности
         if (!hasEnoughMana(30)) {
-            println("Недостаточно маны! Нужно 30, сейчас: $mana")
+            println("Недостаточно энергии! Нужно 30, сейчас: $mana")
             return
         }
 
@@ -160,7 +160,7 @@ class Adrian(
     }
 
     override fun showStatus() {
-        println("$name ($role) - Здоровье: $health/$maxHealth, Мана: $mana (ЛЕКАРЬ)")
+        println("$name ($role) - Здоровье: $health/$maxHealth, Энергия искры: $mana (ЛЕКАРЬ)")
     }
 }
 
@@ -168,7 +168,7 @@ class Zahir(
     name: String = "Захир",
     health: Int = 120,
     maxHealth: Int = 120
-) : PlayerCharacter(name, health, maxHealth, "Воин") {
+) : PlayerCharacter(name, health, maxHealth, "Копейщик") {
 
     override fun firstAction(target: Character?) {
         if (target == null) {
@@ -176,7 +176,7 @@ class Zahir(
             return
         }
         val damage = if (hasBuff("Ярость")) 35 else 25
-        println("$name наносит удар мечом по ${target.name}!")
+        println("$name наносит удар копьем по ${target.name}!")
         target.takeDamage(damage)
     }
 
@@ -193,13 +193,13 @@ class Zahir(
         }
         // Проверяем ману перед использованием способности
         if (!hasEnoughMana(40)) {
-            println("Недостаточно маны! Нужно 40, сейчас: $mana")
+            println("Недостаточно энергии! Нужно 40, сейчас: $mana")
             return
         }
 
         println("$name использует сокрушительный удар по ${target.name}!")
         target.takeDamage(50)
-        useMana(40) // Используем ману
+        useMana(40)
         addBuff("Ярость")
     }
 }
@@ -208,18 +208,18 @@ class Milo(
     name: String = "Мило",
     health: Int = 90,
     maxHealth: Int = 90,
-    role: String = "Маг"  // Добавляем параметр role в основной конструктор
+    role: String = "Агент"
 ) : PlayerCharacter(name, health, maxHealth, role) {
 
     // Дополнительный конструктор без role
-    constructor(name: String) : this(name, 90, 90, "Маг")
+    constructor(name: String) : this(name, 90, 90, "Агент")
 
     override fun firstAction(target: Character?) {
         if (target == null) {
             println("$name: Нет цели для атаки!")
             return
         }
-        println("$name использует магическую стрелу по ${target.name}!")
+        println("$name использует теневую стрелу по ${target.name}!")
         target.takeDamage(20)
         mana += 10
     }
@@ -239,23 +239,23 @@ class Milo(
             println("$name: Нет цели для атаки!")
             return
         }
-        // Проверяем ману перед использованием способности
+        // Проверяем энергию перед использованием способности
         if (!hasEnoughMana(50)) {
-            println("Недостаточно маны! Нужно 50, сейчас: $mana")
+            println("Недостаточно энергии! Нужно 50, сейчас: $mana")
             return
         }
 
-        println("$name вызывает огненную бурю на ${target.name}!")
+        println("$name вызывает теневую гробницу на ${target.name}!")
         target.takeDamage(60)
-        useMana(50) // Используем ману
+        useMana(50)
     }
 }
 
 // 6. Класс босса
 class CoolTeam(
-    name: String = "Команда Крутых",
-    health: Int = 200,
-    maxHealth: Int = 200
+    name: String = "CoolT3am",
+    health: Int = 300,
+    maxHealth: Int = 300
 ) : Character(name, health, maxHealth) {
 
     private var specialAttackCooldown: Int = 0
@@ -272,7 +272,6 @@ class CoolTeam(
             val damage = 30
             target.takeDamage(damage)
         }
-        // Сообщение об ошибке убрано - оно будет в enemyTurn
     }
 
     override fun thirdAction(target: Character?) {
@@ -323,7 +322,7 @@ class Party {
         println("\n=== Статус команды ===")
         members.forEachIndexed { index, member ->
             val status = if (member.isAlive) "✅ ЖИВ" else "💀 МЕРТВ"
-            println("${index + 1}. ${member.name} (${member.role}) - Здоровье: ${member.health}/${member.maxHealth}, Мана: ${member.mana} - $status")
+            println("${index + 1}. ${member.name} (${member.role}) - Здоровье: ${member.health}/${member.maxHealth}, Энергия искры: ${member.mana} - $status")
         }
     }
 }
@@ -359,13 +358,13 @@ object Game {
     }
 
     private fun initializeGame() {
-        println("🎮 Добро пожаловать в текстовую RPG!")
-        println("Ваша задача - победить босса 'Команда Крутых'!")
+        println("🎮 Добро пожаловать в Death Theatre!")
+        println("Ваша задача - победить босса 'CoolT3am'!")
 
         // Создаем персонажей с разными конструкторами
         party.addMember(Adrian()) // основной конструктор
         party.addMember(Zahir()) // основной конструктор
-        party.addMember(Milo("Мило-маг")) // дополнительный конструктор
+        party.addMember(Milo("Мило-шпион")) // дополнительный конструктор
 
         boss = CoolTeam()
 
@@ -484,7 +483,7 @@ object Game {
 
             println("\n🎯 Выберите союзника для усиления:")
             availableAllies.forEachIndexed { index, member ->
-                println("${index + 1} - ${member.name} (Здоровье: ${member.health}/${member.maxHealth}, Мана: ${member.mana})")
+                println("${index + 1} - ${member.name} (Здоровье: ${member.health}/${member.maxHealth}, Энергия искры ${member.mana})")
             }
 
             while (true) {
@@ -597,7 +596,7 @@ object Game {
 // 9. Демонстрация работы системы
 fun main() {
     println("🎮 " + "=".repeat(50))
-    println("           ТЕКСТОВАЯ RPG - БИТВА С БОССОМ")
+    println("           ТЕКСТОВАЯ RPG - Death theatre")
     println("🎮 " + "=".repeat(50))
     println()
     println("📖 Правила игры:")
@@ -609,7 +608,7 @@ fun main() {
     println("🎯 Управление:")
     println("• Выбирайте действий цифрами 1, 2, 3")
     println("• Выбирайте цели из предложенного списка")
-    println("• Следите за маной и здоровьем героев")
+    println("• Следите за энергией искры и здоровьем героев")
     println()
 
     Game.startGame()
