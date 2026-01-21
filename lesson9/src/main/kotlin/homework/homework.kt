@@ -36,15 +36,4 @@ fun createZipArchive(sourceDir: File, outputFile: File) {
     }
 }
 
-fun main() {
-    val sourceDir = File("project_data")
-    val zipFile = File("archive.zip")
-
-    try {
-        createZipArchive(sourceDir, zipFile)
-        println("Архив успешно создан!")
-    } catch (e: Exception) {
-        println("Ошибка: ${e.message}")
-    }
-}
 
