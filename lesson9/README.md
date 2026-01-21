@@ -4,6 +4,7 @@
 Найти все строки со словом ERROR во всех логах в каталоге logs (включая logs/old) и сохранить их в файл errors.txt в корне проекта.
 
 ```bash
+grep -r "ERROR" logs > errors.txt    
 TODO()
 ```
 
@@ -11,6 +12,8 @@ TODO()
 Создать каталог archived/ в корне проекта и переместить туда все файлы из logs/old.
 
 ```bash
+ mkdir -p archived/
+ mv logs/old/* archived/
 TODO()
 ```
 
@@ -18,6 +21,7 @@ TODO()
 Посчитать общий размер каталога logs и записать результат в logs_size.txt.
 
 ```bash
+du -s -h logs > logs_size.txt
 TODO()
 ```
 
@@ -25,6 +29,7 @@ TODO()
 Найти самый большой файл в каталоге logs (без учёта подкаталогов) и записать его имя в файл biglog.txt.
 
 ```bash
+find logs -type f | sort -nr | head -n1 > biglog.txt
 TODO()
 ```
 
@@ -32,6 +37,7 @@ TODO()
 Подсчитать количество файлов с расширением .log во всём каталоге logs и сохранить результат в log_count.txt.
 
 ```bash
+find ./logs -type f -name "*.logs" | wc -l > log_count.txt
 TODO()
 ```
 
@@ -39,6 +45,7 @@ TODO()
 Найти во всех config/*.conf строки, содержащие слово "host", и записать в host_params.txt.
 
 ```bash
+grep "host" logs/config/*.conf > host_params.txt
 TODO()
 ```
 
@@ -46,6 +53,7 @@ TODO()
 Создать zip-архив config_backup.zip, содержащий все файлы из config/.
 
 ```bash
+tar -a -c -f config_backup.zip logs/config/
 TODO()
 ```
 
@@ -56,6 +64,7 @@ TODO()
 - файл errors.txt (если он есть)
 
 ```bash
+tar -a -cf project_backup.zip logs/config/*.conf logs/*.logs errors.txt
 TODO()
 ```
 

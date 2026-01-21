@@ -7,6 +7,7 @@ open class Account(
 ){
     fun deposit(amount: Double) {
         balance += amount
+
     }
 
     open fun withdraw(amount: Double) : Boolean{

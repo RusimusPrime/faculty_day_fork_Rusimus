@@ -1,6 +1,18 @@
 plugins {
-    id("buildlogic.kotlin-library-conventions")
+    kotlin("jvm") version "1.9.0"
 }
+
+group = "org.example"
+version = "1.0"
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation(kotlin("stdlib"))
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }
