@@ -1,18 +1,16 @@
 plugins {
-    kotlin("jvm") version "1.9.0"
+    buildlogic.`kotlin-common-conventions-no-detekt`
 }
 
-group = "org.example"
-version = "1.0"
 
-repositories {
-    mavenCentral()
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs(
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.stdout.encoding=UTF-8",
+        "-Dsun.stderr.encoding=UTF-8"
+    )
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
 }
