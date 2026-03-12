@@ -26,7 +26,6 @@ fun request(url: String, method: String, body: String? = null): Pair<Int, String
     connection.doOutput = (body != null)  // разрешаем запись тела, если оно есть
 
     return try {
-        // Если есть тело, записываем его в output stream
         if (body != null) {
             connection.outputStream.use { os ->
                 os.write(body.toByteArray(Charsets.UTF_8))
