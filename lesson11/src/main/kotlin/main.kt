@@ -61,8 +61,6 @@ object Deadlock {
     val lock1 = Any()
     val lock2 = Any()
     fun runDeadlock() {
-
-
         val threads_1 =
             Thread {
                 synchronized(lock1) {
