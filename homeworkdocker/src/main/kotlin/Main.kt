@@ -1,5 +1,3 @@
-package homework
-
 // 1. Абстрактный класс с общими характеристиками
 abstract class Character(
     open val name: String,
