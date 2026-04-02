@@ -48,44 +48,44 @@ fun main() {
     // TODO 2: выполнить 8 шагов, каждый раз вызывая request() и выводя результат
 
     // Шаг 1: получить все заметки
-    println("=== 1. GET /api/notes — все заметки ===")
+    println("1. GET /api/notes — все заметки")
     val (code1, body1) = request(BASE, "GET")
     println("Код: $code1\nТело: $body1\n")
 
     // Шаг 2: создать новую заметку
-    println("=== 2. POST /api/notes — создать заметку ===")
+    println("2. POST /api/notes — создать заметку")
     val newNote = """{"title":"Домашка","content":"Сделать задание по сетям","tag":"учёба"}"""
     val (code2, body2) = request(BASE, "POST", newNote)
     println("Код: $code2\nТело: $body2\n")
 
     // Шаг 3: получить заметку по id
-    println("=== 3. GET /api/notes/1 — одна заметка ===")
+    println("3. GET /api/notes/1 — одна заметка")
     val (code3, body3) = request("$BASE/1", "GET")
     println("Код: $code3\nТело: $body3\n")
 
     // Шаг 4: обновить заметку
-    println("=== 4. PUT /api/notes/1 — обновить заметку ===")
+    println("4. PUT /api/notes/1 — обновить заметку")
     val updatedNote = """{"title":"Покупки (обновлено)","content":"Молоко, хлеб, яйца, сыр","tag":"личное"}"""
     val (code4, body4) = request("$BASE/1", "PUT", updatedNote)
     println("Код: $code4\nТело: $body4\n")
 
     // Шаг 5: фильтр по тегу
-    println("=== 5. GET /api/notes?tag=учёба — фильтр по тегу ===")
+    println("5. GET /api/notes?tag=учёба — фильтр по тегу")
     val (code5, body5) = request("$BASE?tag=учёба", "GET")
     println("Код: $code5\nТело: $body5\n")
 
     // Шаг 6: удалить заметку
-    println("=== 6. DELETE /api/notes/1 — удалить заметку ===")
+    println("6. DELETE /api/notes/1 — удалить заметку")
     val (code6, body6) = request("$BASE/1", "DELETE")
     println("Код: $code6\nТело: $body6\n")
 
     // Шаг 7: запросить несуществующую заметку (ожидаем 404)
-    println("=== 7. GET /api/notes/999 — несуществующая заметка ===")
+    println("7. GET /api/notes/999 — несуществующая заметка")
     val (code7, body7) = request("$BASE/999", "GET")
     println("Код: $code7\nТело: $body7\n")
 
     // Шаг 8: финальное состояние
-    println("=== 8. GET /api/notes — финальное состояние ===")
+    println("8. GET /api/notes — финальное состояние")
     val (code8, body8) = request(BASE, "GET")
     println("Код: $code8\nТело: $body8")
 }
